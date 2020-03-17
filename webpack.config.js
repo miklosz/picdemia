@@ -34,7 +34,6 @@ module.exports = {
                         options: {
                             modules: true,
                             importLoaders: 1,
-                            localIdentName: "[name]_[local]_[hash:base64]",
                             sourceMap: true
                         }
                     }
@@ -56,7 +55,8 @@ module.exports = {
             favicon: './client/public/favicon.ico'
         }),
         new NodemonPlugin({
-            script: './server/index.js'
+            script: './server/index.js',
+            watch: path.resolve('./server'),
         })
     ]
 };
