@@ -4,7 +4,10 @@
   "description": "Search for images from 2 external APIs",
   "main": "server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack -p && node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --open",
+    "prod": "webpack -p && node server/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,10 +20,10 @@
   },
   "homepage": "https://github.com/miklosz/picdemia#readme",
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-react": "^7.8.3",
     "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
     "html-webpack-plugin": "^3.2.0",
@@ -33,6 +36,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "script-loader": "^0.7.2"
   }
 }
