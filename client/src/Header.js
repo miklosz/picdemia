@@ -1,10 +1,12 @@
 import React from 'react';
-import styles from './Header.module.css'
+import styles from './Header.module.css';
+import logo from './img/logo.png'
 
 export default function Header(props) {
     return (
         <header className={styles.header}>
-            <h1>Picdemia</h1>    
+            <img src={logo} alt="Picdemia logo" width="75" height="75" />
+            <h1>Picdemia</h1>
         </header>
     );
 }    

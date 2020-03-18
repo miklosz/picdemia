@@ -1,10 +1,16 @@
 ul {
     list-style: none;
     display: flex;
+    align-items: center;
 }
 
 li {
-    width: 100px;
-    height: 100px;
-    padding: 20px;
+    width: 120px;
+    padding: 5px;
+}
+
+li > a {
+    display: block;
+    border: 2px solid var(--main-color);
+    border-radius: 2px;
 }
