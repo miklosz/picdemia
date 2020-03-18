@@ -1,5 +1,5 @@
+require('dotenv').config();
 const express = require('express');
-const os = require('os');
 
 const app = express();
 
@@ -12,7 +12,9 @@ app.use((req, res, next) => {
   });
 
 app.get('/api/search/:query', (req, res) => { 
-  console.log(req.params.query);
+  console.log(process.env.API_KEY_GIPHY);
+  console.log(process.env.API_KEY_PIXABAY);
+
   res.send({ 
     pictures: [
       {
