@@ -8,28 +8,41 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             status: 'loading',
-            searchTerm: '',
-            results: ''
+            query: '',
         }
         this.settings = {
-            "url": "//127.0.0.1:8080/api/search",
+            "url": "//127.0.0.1:8080/api/search/",
             "options": {
                 "method": "GET",
             },
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleFetchedData(data) {
-        console.log(data)
+    handleSubmit(event) {
+        event.preventDefault();
+        this.fetchData(this.state.query);
+    }
+    
+    handleChange(event) {
+        this.setState({
+            query: event.target.value
+        });
     }
 
-    componentDidMount() {
-        fetch(this.settings.url, this.settings.options)
+    fetchData(query) {
+        fetch(this.settings.url + query, this.settings.options)
             .then(resource => resource.json())
-            .then(data => this.handleFetchedData(data, this))
+            .then(data => {
+                this.setState({
+                    results: data.pictures,
+                    status: 'list fetched',
+                    resultsQuery: data.query //different from 'query' - returned by server
+                })
+            })
             .catch(error => {
-                this.setState({ status: "Error fetching data" });
-                this.handleFetchedData(error)
+                this.setState({ status: `Error fetching data ${error}` });
             })
     }
 
@@ -38,8 +51,8 @@ export default class App extends React.Component {
             <div className="App">
                 <Header />
                 <main>
-                    <Search />
-                    <Results searchTerm={this.state.searchTerm} results={this.state.results}/>
+                    <Search onChange={this.handleChange} onSubmit={this.handleSubmit} />
+                    {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} />}
                 </main>
             </div>
         );
