@@ -4,6 +4,9 @@ const bent = require('bent')
 
 const app = express();
 
+const gstatic = require('../server/g.json');
+const pstatic = require('../server/p.json');
+
 app.use(express.static('build'));
 
 app.use((req, res, next) => {
@@ -14,45 +17,49 @@ app.use((req, res, next) => {
 
 app.get('/api/search/:query', async (req, res) => {
   const query = req.params.query;
-  const key_giphy = process.env.API_KEY_GIPHY;
-  const key_pixabay = process.env.API_KEY_PIXABAY;
-  const count = 5;
-  const getJSON = bent('json')
+  const count = 1;
+  const getJSON = bent('json');
+  //const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=0&rating=G&lang=en&q=${query}`;
+  //const url_pixabay =`https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&q=${query}`;
 
-  console.log(`https://pixabay.com/api/?key=${key_pixabay}&image_type=allto&pretty=true&per_page=${count}&q=${query}`);
+  const url_giphy = 'http://localhost:8080/api/g';
+  const url_pixabay = 'http://localhost:8080/api/p';
 
-  // try/catch should be for two api's separately - now when one fails, both fail
-  try {
-    let giphy = await getJSON(`https://api.giphy.com/v1/gifs/search?api_key=${key_giphy}&limit=${count}&offset=0&rating=G&lang=en&q=${query}`);
-    let pixabay = await getJSON(`https://pixabay.com/api/?key=${key_pixabay}&image_type=allto&pretty=true&per_page=${count}&q=${query}`);
-    console.log(giphy.data.length);
-    console.log(pixabay.hits.length);
-   
-    // sanitaze data
-
-    // combine into one object
-
-    // optionally - cache / store on the server
-
-    // serve to frontend
-
-    let result = {
-      query: req.params.query,
-      pictures: {
-        g: giphy.data.length,
-        p: pixabay.hits.length
-      }
-    }
-    res.json(result);
-
-  } catch (e) {
-    console.error('gotchya',e)
-    res.send(e)
+  const fetchAPI = (url) => {
+    let results = getJSON(url).catch((error) => {
+      console.log('Error in fetching data',error.message)
+      return { 
+        error: 
+          { message: error.message, code: error.statusCode }
+        }
+    });
+    return results;
   }
+
+  let giphy = await fetchAPI(url_giphy);
+  let pixabay = await fetchAPI(url_pixabay);
+
+  console.log(giphy);
+  console.log(pixabay);
+  
+  let result = {
+    query: req.params.query,
+    pictures: {
+      g: giphy.data.length,
+      p: pixabay.hits.length
+    }
+  }
+
+  res.json(result);
 
 });
 
 app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term!' }));
+
+// temp "cache"
+app.get('/api/g', (req, res) => res.send(gstatic));
+app.get('/api/p', (req, res) => res.send(pstatic));
+
 app.get('/api', (req, res) => res.send({ error: 'Some minimalistic API documentation will be shown here' }));
 
 app.listen(8080, () => console.log('Server started!'));
