@@ -7,7 +7,8 @@
     "start": "webpack -p && node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open",
-    "prod": "webpack -p && node server/index.js"
+    "prod": "webpack -p && node server/index.js",
+    "server" : "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "bent": "^7.1.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "script-loader": "^0.7.2"

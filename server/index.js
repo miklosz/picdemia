@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const https = require('https');
+const bent = require('bent')
 
 const app = express();
 
@@ -12,56 +12,47 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api/search/:query', (req, res) => {
+app.get('/api/search/:query', async (req, res) => {
   const query = req.params.query;
   const key_giphy = process.env.API_KEY_GIPHY;
   const key_pixabay = process.env.API_KEY_PIXABAY;
+  const count = 5;
+  const getJSON = bent('json')
 
-  https.get(`https://api.giphy.com/v1/gifs/search?api_key=${key_giphy}&limit=5&offset=0&rating=G&lang=en&q=${query}`, (resp) => {
-    let data = '';
+  console.log(`https://pixabay.com/api/?key=${key_pixabay}&image_type=allto&pretty=true&per_page=${count}&q=${query}`);
 
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
+  // try/catch should be for two api's separately - now when one fails, both fail
+  try {
+    let giphy = await getJSON(`https://api.giphy.com/v1/gifs/search?api_key=${key_giphy}&limit=${count}&offset=0&rating=G&lang=en&q=${query}`);
+    let pixabay = await getJSON(`https://pixabay.com/api/?key=${key_pixabay}&image_type=allto&pretty=true&per_page=${count}&q=${query}`);
+    console.log(giphy.data.length);
+    console.log(pixabay.hits.length);
+   
+    // sanitaze data
 
-    resp.on('end', () => {
-      console.log(JSON.parse(data));
-      let giphy = JSON.parse(data);
-      res.send(giphy)
-    });
+    // combine into one object
 
+    // optionally - cache / store on the server
 
-  }).on("error", (err) => {
-    console.log("Error: " + err.message);
-  })
+    // serve to frontend
 
+    let result = {
+      query: req.params.query,
+      pictures: {
+        g: giphy.data.length,
+        p: pixabay.hits.length
+      }
+    }
+    res.json(result);
 
-  // https.get(`https://api.giphy.com/v1/gifs/search?api_key=${key_giphy}&limit=10&offset=0&rating=G&lang=en&q=${query}`,
-  //   resp => {
-  //     resp.on('end', () => {
-  //       console.log(data);
-  //     });
-  //   } 
-  // )
+  } catch (e) {
+    console.error('gotchya',e)
+    res.send(e)
+  }
 
-  // res.send({
-  //   // pictures: [
-  //   //   {
-  //   //     description: 'Test 1',
-  //   //     url: 'https://giphy.com/gifs/breakfast-pancakes-syrup-5zu5JovduWFBS',
-  //   //     imgSrc: 'https://media0.giphy.com/media/5zu5JovduWFBS/100_s.gif?cid=5b3d92eb8d3067ea52afdd2a13ca1efb580c0c39cc0f65a1&rid=100_s.gif'
-  //   //   },
-  //   //   {
-  //   //     description: 'Test 2',
-  //   //     url: 'https://pixabay.com/photos/pancakes-pancake-crepe-s%C3%BCsspeise-2020863/',
-  //   //     imgSrc: 'https://cdn.pixabay.com/photo/2017/01/30/13/49/pancakes-2020863_150.jpg'
-  //   //   },
-  //   // ],
-  //   giphy: giphy,
-  //   query: req.params.query
-  // })
 });
 
 app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term!' }));
+app.get('/api', (req, res) => res.send({ error: 'Some minimalistic API documentation will be shown here' }));
 
 app.listen(8080, () => console.log('Server started!'));
