@@ -2,12 +2,12 @@ import React from 'react';
 import styles from './Results.module.css'
 
 function ListItem(props) {
-    const {url,imgSrc,description} = props.item;
+    const {full,thumbnail,title,pageUrl,service} = props.item;
     return (
         <li>
             {/* todo: overlay on hover with link to pixabay / giphny and "save image" link */}
-            <a href={url}>
-                <img src={imgSrc} alt={description} />
+            <a href={pageUrl} target="_blank">
+                <img src={thumbnail} alt={`${title} from ${service}`} />
             </a>
         </li>
     )

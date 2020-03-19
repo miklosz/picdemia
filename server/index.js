@@ -17,7 +17,11 @@ app.use((req, res, next) => {
 
 app.get('/api/search/:query', async (req, res) => {
   const query = req.params.query;
-  const count = 1;
+  const count = req.params.count? req.params.count : 10;
+  
+
+  let pictures = [];
+
   const getJSON = bent('json');
   //const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=0&rating=G&lang=en&q=${query}`;
   //const url_pixabay =`https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&q=${query}`;
@@ -36,21 +40,36 @@ app.get('/api/search/:query', async (req, res) => {
     return results;
   }
 
+  // fetch data from remote API
   let giphy = await fetchAPI(url_giphy);
   let pixabay = await fetchAPI(url_pixabay);
 
-  console.log(giphy);
-  console.log(pixabay);
-  
-  let result = {
-    query: req.params.query,
-    pictures: {
-      g: giphy.data.length,
-      p: pixabay.hits.length
-    }
-  }
+  // format data to desired format
+  giphy.data.map(e => {
+    pictures.push({
+      title: e.title,
+      pageUrl: e.url,
+      thumbnail: e.images.downsized.url,
+      full: e.images.original.url,
+      service: 'giphy'
+    })
+  })
 
-  res.json(result);
+  pixabay.hits.map(e => {
+    pictures.push({
+      title: e.tags,
+      pageUrl: e.pageURL,
+      thumbnail: e.previewURL,
+      full: e.largeImageURL,
+      service: 'giphy'
+    })
+  })
+
+  // expose formatted data to client
+  res.json({
+    query: req.params.query,
+    pictures: pictures
+  });
 
 });
 
