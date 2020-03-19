@@ -13,7 +13,6 @@ function ListItem(props) {
     )
 } 
     
-
 export default function Results(props) {
     return(
         <div className="results">

@@ -4,11 +4,12 @@ const bent = require('bent')
 
 const app = express();
 
-const gstatic = require('../server/g.json');
-const pstatic = require('../server/p.json');
+// const gstatic = require('../server/g.json');
+// const pstatic = require('../server/p.json');
 
 app.use(express.static('build'));
 
+// middleware to handle CORS
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -17,17 +18,14 @@ app.use((req, res, next) => {
 
 app.get('/api/search/:query', async (req, res) => {
   const query = req.params.query;
-  const count = req.params.count? req.params.count : 10;
-  
-
+  const getJSON = bent('json');
+  const count = 10;
+  const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=0&rating=G&lang=en&q=${query}`;
+  const url_pixabay =`https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&q=${query}`;
   let pictures = [];
 
-  const getJSON = bent('json');
-  //const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=0&rating=G&lang=en&q=${query}`;
-  //const url_pixabay =`https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&q=${query}`;
-
-  const url_giphy = 'http://localhost:8080/api/g';
-  const url_pixabay = 'http://localhost:8080/api/p';
+  // const url_giphy = 'http://localhost:8080/api/g';
+  // const url_pixabay = 'http://localhost:8080/api/p';
 
   const fetchAPI = (url) => {
     let results = getJSON(url).catch((error) => {
@@ -61,7 +59,7 @@ app.get('/api/search/:query', async (req, res) => {
       pageUrl: e.pageURL,
       thumbnail: e.previewURL,
       full: e.largeImageURL,
-      service: 'giphy'
+      service: 'pixabay'
     })
   })
 
@@ -76,8 +74,8 @@ app.get('/api/search/:query', async (req, res) => {
 app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term!' }));
 
 // temp "cache"
-app.get('/api/g', (req, res) => res.send(gstatic));
-app.get('/api/p', (req, res) => res.send(pstatic));
+// app.get('/api/g', (req, res) => res.send(gstatic));
+// app.get('/api/p', (req, res) => res.send(pstatic));
 
 app.get('/api', (req, res) => res.send({ error: 'Some minimalistic API documentation will be shown here' }));
 
