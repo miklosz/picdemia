@@ -23,7 +23,6 @@
     display: block;
     width: 100%;
     content: "";
-    /* background: linear-gradient(to right, #00a0de, #ca4f97 26%, #ea5045 50%, #f9b123 74%, #75b843); */
     background: linear-gradient(to right, var(--blue), var(--purple) 26%, var(--red) 50%, var(--yellow) 74%, var(--green));
 }
 
