@@ -22,15 +22,15 @@ function ShowMore(props) {
 
 function ResultsList(props) {
     const { showCount, query, results, more, total } = props.props;
-    console.log(showCount, query, results, more, total);
+
     return (
         <div className={styles.results}>
             <h2 className={styles[showCount]}>{showCount} pictures for: <b>{query}</b> found</h2>
-            <ul className={styles.ul}>
+            {showCount > 0 && <ul className={styles.ul}>
                 {results.map((el) =>
                     <ListItem item={el} key={el.id} />
                 )}
-            </ul>
+            </ul>}
             {(results.length < total) && <ShowMore more={more}/>}
         </div>
     )
@@ -38,5 +38,6 @@ function ResultsList(props) {
 
 export default function Results(props) {
     let showCount = props.total > 0 ? props.total : 'no';
-    return (props.results.length > 0) ?  <ResultsList props={{...props,showCount}} /> : <Loader />
+    //return (props.status === 'loading') ?  <Loader /> : <ResultsList props={{...props,showCount}} />
+    return <Loader />
 }    

@@ -91,7 +91,7 @@ export default class App extends React.Component {
                 </div>
                 <main>
                     {this.state.hints.length > 0 && <Hints onClick={(id) => this.handleLink(id)} hints={this.state.hints}/>}
-                    {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} total={this.state.total} more={this.handleNextResults}/>}
+                    {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} total={this.state.total} more={this.handleNextResults} status={this.state.status}/>}
                 </main>
             </div>
         );

@@ -26,15 +26,6 @@
     background: linear-gradient(to right, var(--blue), var(--purple) 26%, var(--red) 50%, var(--yellow) 74%, var(--green));
 }
 
-
-.loading {
-
-}
-
-.loaded {
-
-}
-
 .new {
     place-content: center;
 }
