@@ -2,11 +2,15 @@ import React from 'react';
 import styles from './Results.module.css'
 
 function ListItem(props) {
-    const { full, thumbnail, title, pageUrl, service } = props.item;
-    console.log(full);
+    const { id, full, thumbnail, title, pageUrl, service } = props.item;
+    console.log(Buffer.from(full).toString('base64'));
+
+    let encodedUrl = Buffer.from(full).toString('base64')
+
     return (
         <li>
-            <a href={pageUrl} target="_blank" download={service}>
+            <a href={`//127.0.0.1:8080/api/getFile/${encodedUrl}`} download={id}>download</a>
+            <a href={pageUrl} target="_blank" >
                 <img src={thumbnail} alt={`${title} from ${service}`} />
                 <h4 className={styles.detailsTop}>{title}</h4>
                 {/* <div className={styles.detailsBottom}>
