@@ -1,13 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const querystring = require('querystring');
 const bent = require('bent');
-const https = require('https');
-
 const app = express();
-
-const gstatic = require('../server/g.json');
-const pstatic = require('../server/p.json');
 
 app.use(express.static('build'));
 
@@ -27,9 +21,6 @@ app.get('/api/search/:query/:count?/:page?', async (req, res) => {
   const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=${offset}&rating=G&lang=en&q=${query}`;
   const url_pixabay =`https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&page=${page}&q=${query}`;
   let pictures = [];
-
-  // const url_giphy = 'http://localhost:8080/api/g';
-  // const url_pixabay = 'http://localhost:8080/api/p';
 
   const fetchAPI = (url) => {
     let results = getJSON(url).catch((error) => {
@@ -78,42 +69,6 @@ app.get('/api/search/:query/:count?/:page?', async (req, res) => {
 });
 
 app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term!' }));
-
-// temp "cache"
-app.get('/api/g', (req, res) => res.send(gstatic));
-app.get('/api/p', (req, res) => res.send(pstatic));
-
-app.get('/api/getFile/:url', async (req, res) => {
-  // const getBuffer = bent('buffer');
-  // let url = Buffer.from(req.params.url, 'base64').toString();
-  
-  // let img = await getBuffer(url);
-  // res.contentType('image');
-  // res.send(img)
-  //console.log(img)
-  let url = Buffer.from(req.params.url, 'base64').toString();
-  // const getImg = bent(url,'GET','buffer');
-  
-  // let img = await getImg();
-
-  // res.contentType('image');
-  // res.send(img)
-
-  var callback = function(response) {
-    if (response.statusCode === 200) {
-        res.writeHead(200, {
-            'Content-Type': response.headers['content-type']
-        });
-        response.pipe(res);
-    } else {
-        res.writeHead(response.statusCode);
-        res.end();
-    }
-  };
-
-  https.request(url, callback).end();
-});
-
-app.get('/api', (req, res) => res.send({ error: 'Some minimalistic API documentation will be shown here' }));
+app.get('/api', (req, res) => res.send("This API has a single endpoint: /search. Accepted parameters: :query/:count?/:page?"));
 
 app.listen(8080, () => console.log('Server started!'));
