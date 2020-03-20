@@ -38,6 +38,5 @@ function ResultsList(props) {
 
 export default function Results(props) {
     let showCount = props.total > 0 ? props.total : 'no';
-    //return (props.status === 'loading') ?  <Loader /> : <ResultsList props={{...props,showCount}} />
-    return <Loader />
+    return (props.status === 'loading') ?  <Loader /> : <ResultsList props={{...props,showCount}} />
 }    

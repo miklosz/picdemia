@@ -6,12 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Picdemia</title>
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,800&amp;subset=latin-ext" rel="stylesheet">
+
 </head>
 
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-        <p class="loader">Picdemia is loading</p>
+        <style>
+            #root {
+                --red: rgb(240, 80, 70);
+                --green: rgb(117, 184, 67);
+                --blue: rgb(0, 160, 222);
+                --purple: rgb(202, 79, 151);
+                --yellow: rgb(249, 177, 35);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .loader {
+                border-top: 16px solid var(--blue);
+                border-right: 16px solid var(--yellow);
+                border-bottom: 16px solid var(--red);
+                border-left: 16px solid var(--green);
+                border-radius: 50%;
+                width: 120px;
+                height: 120px;
+                margin: 1rem auto;
+                animation: spin 2s linear infinite;
+            }
+            
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+            
+        </style>
+
+        <p class="loader"></p>
     </div>
 </body>
+
 </html>

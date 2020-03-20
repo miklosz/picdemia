@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open",
     "prod": "webpack -p && node server/index.js",
-    "server" : "nodemon server/index.js"
+    "server": "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
