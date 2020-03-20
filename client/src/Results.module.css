@@ -16,11 +16,11 @@
     display: flex;
     flex-flow: column;
     align-items: center;
-    
 }
 
 .ul li {
     padding: 2px;
+    overflow: hidden;
 }
 
 .ul li > a {
@@ -31,6 +31,7 @@
 .ul li > a img {
     height: auto;
     width: 100%;
+    border-radius: 3px;    
 }
 
 @media(min-width: 640px) {

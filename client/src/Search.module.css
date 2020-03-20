@@ -1,21 +1,23 @@
 form {
     flex: 1;
-    max-width: 100%;
+    max-width: calc(100% - 2rem);
     text-align: left;
     display: inline-flex;
-    padding: 1rem
+    border: 1px solid rgb(220,220,220);
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.06);
+    margin: 1rem
 }
 
 input {
     font: inherit;
     padding: .5rem;
     color: var(--secondary);
-    border: 2px solid var(--secondary);
+    border: none;
     width: 100%;
     line-height: 2rem;
     font-size: 1.5rem;
-    border-width: 2px 0 2px 2px;
-    box-shadow: var(--secondary) 0 0 3px inset;
 }
 
 input:focus {
@@ -25,9 +27,8 @@ input:focus {
 
 .button {
     height: 3.3rem;
-    width: 3.3rem;
-    background: url(./img/search-icon.png) no-repeat center / contain var(--green);
-    border: 2px solid var(--secondary);
-    border-width: 2px 2px 2px 0;
+    width: 4.2rem;
+    background: url(./img/search-icon.png) no-repeat  center / 75% var(--green);
+    border: 0;
     text-indent: 100%;
 }
