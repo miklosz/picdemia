@@ -25,6 +25,10 @@ input:focus {
     box-shadow: none;
 }
 
+label {
+    display: none;
+}
+
 .button {
     height: 3.3rem;
     width: 4.2rem;
