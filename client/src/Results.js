@@ -14,14 +14,16 @@ function ListItem(props) {
 } 
     
 export default function Results(props) {
+    let empty = props.results.length === 0;
+
     return(
-        <div className="results">
-        <h2>Results for: {props.query}</h2>
-        <ul>
-            {props.results.map((el,i) => 
-                <ListItem item={el} key={i}/>
-            )}
-        </ul>
+        <div className={styles.results}>
+            <h2 className={styles.empty}>{empty && 'No '} results for: {props.query}</h2>
+            <ul className={styles.ul}>
+                {props.results.map((el, i) =>
+                    <ListItem item={el} key={i} />
+                )}
+            </ul>
         </div>
     ) 
 }    

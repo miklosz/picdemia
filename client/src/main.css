@@ -1,5 +1,8 @@
 :root {
-    --main-color: rgb(7, 7, 7);
+    --main: rgb(7, 7, 7);
+    --secondary: rgb(130,130,130);
+    --red: rgb(234, 80, 69);
+    --green: rgb(117, 184, 67);
 }
 
 * {
@@ -11,8 +14,8 @@ body {
     padding: 0;
     margin: 0;
     font: 14px Rubik, Arial, sans-serif;
-    color: var(--main-color);
-    text-align: center;
+    color: var(--main);
+    text-align: left;
 }
 
 a {
@@ -27,8 +30,7 @@ img {
     height: auto;
 }
 
-.center-both {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+ul {
+    padding: 0;
+    list-style: none;
 }

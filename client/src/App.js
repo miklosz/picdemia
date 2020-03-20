@@ -3,6 +3,8 @@ import Header from './Header';
 import Search from './Search';
 import Results from './Results';
 import Hints from './Hints'
+import styles from './App.module.css'
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -25,12 +27,15 @@ export default class App extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.setState({
-            status: 'loading',
-            results: '',
-            hints: [...this.state.hints,this.state.query]
-        })
-        this.fetchData(this.state.query);
+        if (this.state.query) {
+            let updatedHints = [...new Set([...this.state.hints,this.state.query])]
+            this.setState({
+                status: 'loading',
+                results: '',
+                hints: updatedHints
+            })
+            this.fetchData(this.state.query);
+        }
     }
     
     handleChange(event) {
@@ -41,7 +46,6 @@ export default class App extends React.Component {
 
     handleLink(hintKey) {
         event.preventDefault();
-        console.log(hintKey)
         this.setState({
             query: hintKey,
             status: 'loading',
@@ -56,8 +60,9 @@ export default class App extends React.Component {
             .then(data => {
                 this.setState({
                     results: data.pictures,
-                    status: 'list fetched',
-                    resultsQuery: data.query //different from 'query' - returned by server
+                    status: 'loaded',
+                    resultsQuery: data.query,
+                    query: ''
                 })
             })
             .catch(error => {
@@ -67,11 +72,13 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <div className="App">
-                <Header />
-                <main>
+            <div className={`${styles.wrapper} ${styles[this.state.status]}`}>
+                <div className={styles.top}>
+                    <Header />
                     <Search onChange={this.handleChange} onSubmit={this.handleSubmit} query={this.state.query} />
-                    {this.state.hints && <Hints onClick={(id) => this.handleLink(id)} hints={this.state.hints}/>}
+                </div>
+                <main>
+                    {this.state.hints.length > 0 && <Hints onClick={(id) => this.handleLink(id)} hints={this.state.hints}/>}
                     {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} />}
                 </main>
             </div>

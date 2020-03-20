@@ -1,16 +1,46 @@
-ul {
-    list-style: none;
+.results {
+    padding: .25rem 1rem;
+}
+
+.results h2 {
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.results h2.true {
+    color: var(--red);
+}
+
+.ul {
     display: flex;
+    flex-flow: column;
     align-items: center;
+    
 }
 
-li {
-    width: 120px;
-    padding: 5px;
+.ul li {
+    padding: 2px;
 }
 
-li > a {
-    display: block;
-    border: 2px solid var(--main-color);
-    border-radius: 2px;
+.ul li > a {
+    display: inline-block;
+    padding: 1px;
+}
+
+.ul li > a img {
+    height: auto;
+    width: 100%;
+}
+
+@media(min-width: 640px) {
+    .ul {
+        flex-flow: row wrap;
+        justify-content: space-between;
+    }
+
+    .ul li > a img {
+        height: 200px;
+        width: auto;
+    }
 }

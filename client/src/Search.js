@@ -5,7 +5,8 @@ export default function Search(props) {
     const {onSubmit,onChange,query} = props
     return (
         <form onSubmit={onSubmit} method="POST">
-            <input onChange={onChange} placeholder="Search term" value={query}/>
+            <input onChange={onChange} placeholder="Search for images" value={query}/>
+            <button className={styles.button} onClick={onChange} value={query}></button>
         </form>
     );
 }    

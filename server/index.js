@@ -4,8 +4,8 @@ const bent = require('bent')
 
 const app = express();
 
-// const gstatic = require('../server/g.json');
-// const pstatic = require('../server/p.json');
+const gstatic = require('../server/g.json');
+const pstatic = require('../server/p.json');
 
 app.use(express.static('build'));
 
@@ -57,7 +57,7 @@ app.get('/api/search/:query', async (req, res) => {
     pictures.push({
       title: e.tags,
       pageUrl: e.pageURL,
-      thumbnail: e.previewURL,
+      thumbnail: e.webformatURL,
       full: e.largeImageURL,
       service: 'pixabay'
     })
@@ -74,8 +74,8 @@ app.get('/api/search/:query', async (req, res) => {
 app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term!' }));
 
 // temp "cache"
-// app.get('/api/g', (req, res) => res.send(gstatic));
-// app.get('/api/p', (req, res) => res.send(pstatic));
+app.get('/api/g', (req, res) => res.send(gstatic));
+app.get('/api/p', (req, res) => res.send(pstatic));
 
 app.get('/api', (req, res) => res.send({ error: 'Some minimalistic API documentation will be shown here' }));
 
