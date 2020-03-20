@@ -16,19 +16,19 @@ app.get('/api/search/:query/:page?/:count?', async (req, res) => {
   const query = req.params.query;
   const getJSON = bent('json');
   let count = req.params.count > 3 && req.params.count < 200 ? req.params.count : 10; // pixabay limit - results per page 3 - 200
-  let page = req.params.page? req.params.page : 1;
-  let offset = count*page - count;
-  const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=${offset}&rating=G&lang=en&q=${query}`;
-  const url_pixabay =`https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&page=${page}&q=${query}`;
+  let page = req.params.page ? req.params.page : 1;
+  let offset = count * page - count;
   let pictures = [];
+  const url_giphy = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY_GIPHY}&limit=${count}&offset=${offset}&rating=G&lang=en&q=${query}`;
+  const url_pixabay = `https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&image_type=allto&pretty=true&per_page=${count}&page=${page}&q=${query}`;
 
   const fetchAPI = (url) => {
     let results = getJSON(url).catch((error) => {
-      console.log('Error in fetching data',error.message)
-      return { 
-        error: 
+      console.log('Error in fetching data', error.message)
+      return {
+        error:
           { message: error.message, code: error.statusCode }
-        }
+      }
     });
     return results;
   }
@@ -60,7 +60,7 @@ app.get('/api/search/:query/:page?/:count?', async (req, res) => {
     })
   })
 
-  let total = (giphy.data.length > 0 ? giphy.pagination.total_count : 0)  + pixabay.totalHits;
+  let total = (giphy.data.length > 0 ? giphy.pagination.total_count : 0) + pixabay.totalHits;
 
   // expose formatted data to client
   res.json({

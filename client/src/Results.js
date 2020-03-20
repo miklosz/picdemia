@@ -15,7 +15,7 @@ function ListItem(props) {
 }
 
 function ShowMore(props) {
-    return(
+    return (
         <button className={styles.more} onClick={props.more}>Show more</button>
     )
 }
@@ -31,12 +31,12 @@ function ResultsList(props) {
                     <ListItem item={el} key={el.id} />
                 )}
             </ul>}
-            {(results.length < total) && <ShowMore more={more}/>}
+            {(results.length < total) && <ShowMore more={more} />}
         </div>
     )
 }
 
 export default function Results(props) {
     let showCount = props.total > 0 ? props.total : 'no';
-    return (props.status === 'loading') ?  <Loader /> : <ResultsList props={{...props,showCount}} />
-}    
+    return (props.status === 'loading') ? <Loader /> : <ResultsList props={{ ...props, showCount }} />
+}

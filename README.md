@@ -1,12 +1,18 @@
 # Picdemia - picture finder
 Recruitment task - Node + React + Webpack
 
+## Basic info
+`yarn start` or `yarn prod`- production build & serve  
+`yarn dev` - devel  
+Live preview: http://picdemia.borzyszkowski.org  
+
+To run the project API keys are needed - stored in the .env file (API_KEY_GIPHY, API_KEY_PIXABAY). Those or not included in repo ;)
+
 ## The plan
 * Developement with webpack dev server, express, react build
-* Prod optimized for mydevil (folder structure + main entrypoint app.js!)
 
 ### Frontend
-* Two components - search and results list
+* Two core components - search and results list, packed in App Component
 * Search rather onSubmit, not onChange to cut down the API usage
 * Nice to have - some filtering (image size, type etc)
 * Nice to have - search history & autocomplete
@@ -27,3 +33,15 @@ Recruitment task - Node + React + Webpack
 * React client app scaffolding added
 * React components for Search and Result added with event handlers
 * Fake JSON response added to server to test req/res based on query from client search component
+* Acutal fetch from external APIs, formatting data and serving it to the client
+* Layout build with CSS modules. Actually - afterwards I think - SASS with single output file would be cleaner and easier to maintain in this case
+* Search history added with option to use it again for search (known as hints)
+
+
+## What more could (or can) be done
+* Tests!
+* Pagination, filtering
+* Adding router to store history and allow to open search results directly from link
+* Serve actuall files, not only their URLs through proxy server
+* Having that: the option to directly dowload file (almost did it :/ )
+* ...and caching both files and search results on the proxy server

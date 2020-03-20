@@ -56,10 +56,8 @@ export default class App extends React.Component {
 
     handleNextResults() {
         event.preventDefault();
-        console.log('more clicked');
         let toPage = this.state.page + 1;
 
-        console.log(`${this.state.query}/${toPage}`);
         this.fetchData(`${this.state.query}/${toPage}`); 
         this.setState({
             page: toPage
