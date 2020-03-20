@@ -15,7 +15,7 @@ export default class App extends React.Component {
             page: 1
         }
         this.settings = {
-            "url": "//127.0.0.1:8080/api/search/",
+            "url": "/api/search/",
             "options": {
                 "method": "GET",
             },
