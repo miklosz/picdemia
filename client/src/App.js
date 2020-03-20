@@ -5,14 +5,14 @@ import Results from './Results';
 import Hints from './Hints'
 import styles from './App.module.css'
 
-
 export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             status: 'new',
             query: '',
-            hints: []
+            hints: [],
+            page: 1
         }
         this.settings = {
             "url": "//127.0.0.1:8080/api/search/",
@@ -22,7 +22,7 @@ export default class App extends React.Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        //this.handleLink = this.handleLink.bind(this,hintKey);
+        this.handleNextResults = this.handleNextResults.bind(this);
     }
 
     handleSubmit(event) {
@@ -31,7 +31,7 @@ export default class App extends React.Component {
             let updatedHints = [...new Set([...this.state.hints,this.state.query])]
             this.setState({
                 status: 'loading',
-                results: '',
+                results: [],
                 hints: updatedHints
             })
             this.fetchData(this.state.query);
@@ -49,9 +49,21 @@ export default class App extends React.Component {
         this.setState({
             query: hintKey,
             status: 'loading',
-            results: '',
+            results: [],
         });
         this.fetchData(hintKey);
+    }
+
+    handleNextResults() {
+        event.preventDefault();
+        console.log('more clicked');
+        let toPage = this.state.page + 1;
+
+        console.log(`${this.state.query}/${toPage}`);
+        this.fetchData(`${this.state.query}/${toPage}`); 
+        this.setState({
+            page: toPage
+        });
     }
 
     fetchData(query) {
@@ -59,10 +71,10 @@ export default class App extends React.Component {
             .then(resource => resource.json())
             .then(data => {
                 this.setState({
-                    results: data.pictures,
+                    results: this.state.results.concat(data.pictures),
                     status: 'loaded',
                     resultsQuery: data.query,
-                    query: ''
+                    total: data.total
                 })
             })
             .catch(error => {
@@ -79,7 +91,7 @@ export default class App extends React.Component {
                 </div>
                 <main>
                     {this.state.hints.length > 0 && <Hints onClick={(id) => this.handleLink(id)} hints={this.state.hints}/>}
-                    {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} />}
+                    {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} total={this.state.total} more={this.handleNextResults}/>}
                 </main>
             </div>
         );

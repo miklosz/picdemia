@@ -12,7 +12,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api/search/:query/:count?/:page?', async (req, res) => {
+app.get('/api/search/:query/:page?/:count?', async (req, res) => {
   const query = req.params.query;
   const getJSON = bent('json');
   let count = req.params.count > 3 && req.params.count < 200 ? req.params.count : 10; // pixabay limit - results per page 3 - 200
@@ -45,7 +45,7 @@ app.get('/api/search/:query/:count?/:page?', async (req, res) => {
       pageUrl: e.url,
       thumbnail: e.images.downsized.url,
       full: e.images.original.url,
-      service: 'giphy'
+      service: 'giphy',
     })
   })
 
@@ -60,15 +60,18 @@ app.get('/api/search/:query/:count?/:page?', async (req, res) => {
     })
   })
 
+  let total = (giphy.data.length > 0 ? giphy.pagination.total_count : 0)  + pixabay.totalHits;
+
   // expose formatted data to client
   res.json({
     query: req.params.query,
-    pictures: pictures
+    pictures: pictures,
+    total: total
   });
 
 });
 
-app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term!' }));
-app.get('/api', (req, res) => res.send("This API has a single endpoint: /search. Accepted parameters: :query/:count?/:page?"));
+app.get('/api/search', (req, res) => res.send({ error: 'Please provide a valid search term! Accepted parameters: :query/:page?/:count?' }));
+app.get('/api', (req, res) => res.send("This API has a single endpoint: /search. Accepted parameters: :query/:page?/:count?"));
 
 app.listen(8080, () => console.log('Server started!'));

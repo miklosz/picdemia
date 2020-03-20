@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Results.module.css'
+import Loader from './Loader'
 
 function ListItem(props) {
     const { thumbnail, title, pageUrl, service } = props.item;
@@ -13,17 +14,29 @@ function ListItem(props) {
     )
 }
 
-export default function Results(props) {
-    let empty = props.results.length === 0;
+function ShowMore(props) {
+    return(
+        <button className={styles.more} onClick={props.more}>Show more</button>
+    )
+}
 
+function ResultsList(props) {
+    const { showCount, query, results, more, total } = props.props;
+    console.log(showCount, query, results, more, total);
     return (
         <div className={styles.results}>
-            <h2 className={styles.empty}>{empty && 'No '} results for: {props.query}</h2>
+            <h2 className={styles[showCount]}>{showCount} pictures for: <b>{query}</b> found</h2>
             <ul className={styles.ul}>
-                {props.results.map((el) =>
+                {results.map((el) =>
                     <ListItem item={el} key={el.id} />
                 )}
             </ul>
+            {(results.length < total) && <ShowMore more={more}/>}
         </div>
     )
+}
+
+export default function Results(props) {
+    let showCount = props.total > 0 ? props.total : 'no';
+    return (props.results.length > 0) ?  <ResultsList props={{...props,showCount}} /> : <Loader />
 }    

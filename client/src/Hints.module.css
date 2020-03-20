@@ -16,6 +16,7 @@
     margin: .3rem;
     color: white;
     cursor: pointer;
+    border-radius: 3px;
 }
 
 .button:nth-child(5n) {
