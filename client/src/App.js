@@ -27,14 +27,14 @@ export default class App extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    if (this.state.query) {
-      const updatedHints = [...new Set([...this.state.hints, this.state.query])];
-      this.setState({
+    const { query } = this.state;
+    if (query) {
+      this.setState((prevState) => ({
         status: 'loading',
         results: [],
-        hints: updatedHints,
-      });
-      this.fetchData(this.state.query);
+        hints: [...prevState.hints, query],
+      }));
+      this.fetchData(query);
     }
   }
 
@@ -44,7 +44,7 @@ export default class App extends React.Component {
     });
   }
 
-  handleLink(hintKey) {
+  handleLink(event, hintKey) {
     event.preventDefault();
     this.setState({
       query: hintKey,
@@ -54,26 +54,26 @@ export default class App extends React.Component {
     this.fetchData(hintKey);
   }
 
-  handleNextResults() {
+  handleNextResults(event) {
     event.preventDefault();
-    const toPage = this.state.page + 1;
-
-    this.fetchData(`${this.state.query}/${toPage}`);
-    this.setState({
-      page: toPage,
-    });
+    const { query, page } = this.state;
+    this.fetchData(`${query}/${page + 1}`);
+    this.setState((prevState) => ({
+      page: prevState.page + 1,
+    }));
   }
 
   fetchData(query) {
-    fetch(this.settings.url + query, this.settings.options)
+    const { url, options } = this.settings;
+    fetch(url + query, options)
       .then((resource) => resource.json())
       .then((data) => {
-        this.setState({
-          results: this.state.results.concat(data.pictures),
+        this.setState((prevState) => ({
+          results: prevState.results.concat(data.pictures),
           status: 'loaded',
           resultsQuery: data.query,
           total: data.total,
-        });
+        }));
       })
       .catch((error) => {
         this.setState({ status: `Error fetching data ${error}` });
@@ -81,15 +81,17 @@ export default class App extends React.Component {
   }
 
   render() {
+    const { handleChange, handleSubmit, handleLink, handleNextResults } = this;
+    const { status, query, hints, results, resultsQuery, total } = this.state;
     return (
-      <div className={`${styles.wrapper} ${styles[this.state.status]}`}>
+      <div className={`${styles.wrapper} ${styles[status]}`}>
         <div className={styles.top}>
           <Header />
-          <Search onChange={this.handleChange} onSubmit={this.handleSubmit} query={this.state.query} />
+          <Search onChange={handleChange} onSubmit={handleSubmit} query={query} />
         </div>
         <main>
-          {this.state.hints.length > 0 && <Hints onClick={(id) => this.handleLink(id)} hints={this.state.hints} />}
-          {this.state.results && <Results query={this.state.resultsQuery} results={this.state.results} total={this.state.total} more={this.handleNextResults} status={this.state.status} />}
+          {hints.length > 0 && <Hints onClick={(id) => handleLink(id)} hints={hints} />}
+          {results && <Results query={resultsQuery} results={results} total={total} more={handleNextResults} status={status} />}
         </main>
       </div>
     );

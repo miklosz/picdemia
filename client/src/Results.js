@@ -3,9 +3,7 @@ import styles from './Results.module.css';
 import Loader from './Loader';
 
 function ListItem(props) {
-  const {
-    thumbnail, title, pageUrl, service,
-  } = props.item;
+  const { thumbnail, title, pageUrl, service } = props.item;
   return (
     <li>
       <a href={pageUrl} target="_blank" rel="noopener noreferrer">
@@ -23,9 +21,7 @@ function ShowMore(props) {
 }
 
 function ResultsList(props) {
-  const {
-    showCount, query, results, more, total,
-  } = props.props;
+  const { showCount, query, results, more, total } = props.props;
 
   return (
     <div className={styles.results}>

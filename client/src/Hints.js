@@ -6,7 +6,7 @@ export default function Hints(props) {
   return (
     <div className={styles.hints}>
       <h3>Latest searches:</h3>
-      {hints.map((el) =>  <button type="button" className={styles.button} onClick={() => onClick(el)} key={el}>{el}</button>)}
+      {hints.map((el) => <button type="button" className={styles.button} onClick={() => onClick(el)} key={el}>{el}</button>)}
     </div>
   );
 }
