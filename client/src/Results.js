@@ -1,6 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import styles from './Results.module.css';
 import Loader from './Loader';
+
+
+
+export default function Results(props) {
+  const { query, status } = props;
+  const [results, setResults] = useState([]);
+  const [localStatus, setLocalStatus] = useState(status);
+
+  useEffect(() => {
+    function fetchData(query) {
+      const url = '/api/search/';
+      const options = { method: 'GET' };
+
+      fetch(url + query, options)
+        .then((resource) => resource.json())
+        .then((data) => {
+          setResults({
+            pictures: data.pictures,
+            total: data.total
+          });
+          setLocalStatus('error')
+        })
+        .catch((error) => {
+          setLocalStatus('loaded')
+        });
+    }
+    fetchData(query)
+  }, [query]);
+
+  // render
+  const showCount = results.total > 0 ? results.total : 'no';
+
+  //if (status === 'error') return <Error />;
+  //if (status === 'loading') return <Loader />;
+  return <ResultsList 
+    showCount = {showCount}
+    query = {query}
+    results =  {results.pictures}
+    total = {results.total} />;
+}
+
 
 function ListItem(props) {
   const { thumbnail, title, pageUrl, service } = props.item;
@@ -14,12 +55,12 @@ function ListItem(props) {
   );
 }
 
-function ShowMore(props) {
-  const { more } = props;
-  return (
-    <button className={styles.more} onClick={more} type="button">Show more</button>
-  );
-}
+// function ShowMore(props) {
+//   const { more } = props;
+//   return (
+//     <button className={styles.more} onClick={more} type="button">Show more</button>
+//   );
+// }
 
 function Error() {
   return (
@@ -30,7 +71,7 @@ function Error() {
 }
 
 function ResultsList(props) {
-  const { showCount, query, results, more, total } = props.props;
+  const { showCount, query, results, total } = props;
 
   return (
     <div className={styles.results}>
@@ -38,20 +79,72 @@ function ResultsList(props) {
         {showCount} pictures for: <b>{query}</b> found
       </h2>
       {showCount > 0 && (
-      <ul className={styles.ul}>
-        {results.map((el) => <ListItem item={el} key={el.id} />)}
-      </ul>
+        <ul className={styles.ul}>
+          {results.map((el) => <ListItem item={el} key={el.id} />)}
+        </ul>
       )}
-      {(results.length < total) && <ShowMore more={more} />}
+      {/* {(results.length < total) && <ShowMore more={more} />} */}
     </div>
   );
 }
 
-export default function Results(props) {
-  const { total, status } = props;
-  const showCount = total > 0 ? total : 'no';
 
-  if (status === 'error') return <Error />;
-  if (status === 'loading') return <Loader />;
-  return <ResultsList props={{ ...props, showCount }} />;
-}
+
+
+
+
+
+// OLD ONE
+// function ListItem(props) {
+//   const { thumbnail, title, pageUrl, service } = props.item;
+//   return (
+//     <li>
+//       <a href={pageUrl} target="_blank" rel="noopener noreferrer">
+//         <img src={thumbnail} alt={`${title} from ${service}`} />
+//         <h4 className={styles.detailsTop}>{title}</h4>
+//       </a>
+//     </li>
+//   );
+// }
+
+// function ShowMore(props) {
+//   const { more } = props;
+//   return (
+//     <button className={styles.more} onClick={more} type="button">Show more</button>
+//   );
+// }
+
+// function Error() {
+//   return (
+//     <div className={styles.error}>
+//       <p>An error occured. Please try again later</p>
+//     </div>
+//   );
+// }
+
+// function ResultsList(props) {
+//   const { showCount, query, results, more, total } = props.props;
+
+//   return (
+//     <div className={styles.results}>
+//       <h2 className={styles[showCount]}>
+//         {showCount} pictures for: <b>{query}</b> found
+//       </h2>
+//       {showCount > 0 && (
+//         <ul className={styles.ul}>
+//           {results.map((el) => <ListItem item={el} key={el.id} />)}
+//         </ul>
+//       )}
+//       {(results.length < total) && <ShowMore more={more} />}
+//     </div>
+//   );
+// }
+
+// export default function Results(props) {
+//   const { total, status } = props;
+//   const showCount = total > 0 ? total : 'no';
+
+//   if (status === 'error') return <Error />;
+//   if (status === 'loading') return <Loader />;
+//   return <ResultsList props={{ ...props, showCount }} />;
+// }
