@@ -23,6 +23,7 @@ export default class App extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNextResults = this.handleNextResults.bind(this);
+    this.handleLink = this.handleLink.bind(this);
   }
 
   handleSubmit(event) {
@@ -44,7 +45,7 @@ export default class App extends React.Component {
     });
   }
 
-  handleLink(event, hintKey) {
+  handleLink(hintKey, event) {
     event.preventDefault();
     this.setState({
       query: hintKey,
@@ -76,7 +77,10 @@ export default class App extends React.Component {
         }));
       })
       .catch((error) => {
-        this.setState({ status: `Error fetching data ${error}` });
+        this.setState({
+          status: 'error',
+          error: `Local fetching data. ${error}`,
+        });
       });
   }
 
@@ -90,7 +94,7 @@ export default class App extends React.Component {
           <Search onChange={handleChange} onSubmit={handleSubmit} query={query} />
         </div>
         <main>
-          {hints.length > 0 && <Hints onClick={(id) => handleLink(id)} hints={hints} />}
+          {hints.length > 0 && <Hints onClick={handleLink} hints={hints} />}
           {results && <Results query={resultsQuery} results={results} total={total} more={handleNextResults} status={status} />}
         </main>
       </div>

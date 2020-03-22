@@ -20,19 +20,19 @@
 }
 
 .button:nth-child(5n) {
-    background: #00a0de
+    background: var(--blue);
 }
 
 .button:nth-child(5n-1) {
-    background: #ca4f97
+    background: var(--purple);
 }
 
 .button:nth-child(5n-2) {
-    background: #f9b123
+    background: var(--yellow);
 }
 
 .button:nth-child(5n-3) {
-    background:  var(--green)
+    background:  var(--green);
 }
 
 .button:nth-child(5n-4) {

@@ -15,8 +15,17 @@ function ListItem(props) {
 }
 
 function ShowMore(props) {
+  const { more } = props;
   return (
-    <button className={styles.more} onClick={props.more} type="button">Show more</button>
+    <button className={styles.more} onClick={more} type="button">Show more</button>
+  );
+}
+
+function Error() {
+  return (
+    <div className={styles.error}>
+      <p>An error occured. Please try again later</p>
+    </div>
   );
 }
 
@@ -41,5 +50,8 @@ function ResultsList(props) {
 export default function Results(props) {
   const { total, status } = props;
   const showCount = total > 0 ? total : 'no';
-  return (status === 'loading') ? <Loader /> : <ResultsList props={{ ...props, showCount }} />;
+
+  if (status === 'error') return <Error />;
+  if (status === 'loading') return <Loader />;
+  return <ResultsList props={{ ...props, showCount }} />;
 }

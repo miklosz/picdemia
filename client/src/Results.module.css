@@ -36,6 +36,26 @@
     width: 100%;
 }
 
+.ul li:nth-child(5n) > a img {
+    background: var(--blue);
+}
+
+.ul li:nth-child(5n-1) > a img {
+    background: var(--purple);
+}
+
+.ul li:nth-child(5n-2) > a img {
+    background: var(--yellow);
+}
+
+.ul li:nth-child(5n-3) > a img {
+    background:  var(--green);
+}
+
+.ul li:nth-child(5n-4) > a img {
+    background: var(--red);
+}
+
 .details {
     position: absolute;
     right: 0;
@@ -71,6 +91,12 @@ a:hover .detailsBottom {
     color: var(--red)
 }
 
+.error {
+    color: var(--red);
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
 .more {
     background: var(--green);
     border: 0;
@@ -90,6 +116,7 @@ a:hover .detailsBottom {
 
     .ul li > a img {
         height: 200px;
+        min-width: 100px;
         width: auto;
     }
 }
