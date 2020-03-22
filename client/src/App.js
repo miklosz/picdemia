@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Search from './Search';
 import Results from './Results';
@@ -10,35 +10,34 @@ function App() {
   const [query, setQuery] = useState('');
   const [resultsQuery, setResultsQuery] = useState('');
 
-  console.log(query,resultsQuery)
-
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(query)
     if (query) {
       setResultsQuery(query);
       setStatus('loading');
-      // update (clear) results
-      // update hints (add current query)
-      // fetching data moved to results component
+      setQuery('');
     }
   }
 
+  function handleUpdate(status) {
+    setStatus(status);
+  }
+
   // add hints handler... or handle hints inside the component, based on current query
-  
+
   return (
     <div className={`${styles.wrapper} ${styles[status]}`}>
       <div className={styles.top}>
         <Header />
-        <Search 
-          onChange={(ev) => setQuery(ev.target.value)} 
-          onSubmit={(ev) =>  handleSubmit(ev)} 
-          query={query} />
+        <Search
+          onChange={(ev) => setQuery(ev.target.value)}
+          onSubmit={(ev) => handleSubmit(ev)}
+          query={query}
+        />
       </div>
       <main>
-        {/* <Hints hints={hints} query={resultsQuery} />} */}
-        {status != 'new' && <Results query={resultsQuery} status={status} />}
-        {/* <Results query={resultsQuery} status={status} /> */}
+        {/* <Hints query={resultsQuery} />} */}
+        {status !== 'new' && <Results query={resultsQuery} status={status} handleUpdate={handleUpdate} />}
       </main>
     </div>
   );

@@ -1,45 +1,52 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Results.module.css';
 import Loader from './Loader';
 
-
-
 export default function Results(props) {
-  const { query, status } = props;
-  const [results, setResults] = useState([]);
-  const [localStatus, setLocalStatus] = useState(status);
+  const { query, status, handleUpdate } = props;
+  const [results, setResults] = useState({ pictures: [], total: 0 });
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    function fetchData(query) {
-      const url = '/api/search/';
+    function fetchData(query, page) {
+      const url = `/api/search/${query}/${page}`;
       const options = { method: 'GET' };
 
-      fetch(url + query, options)
-        .then((resource) => resource.json())
-        .then((data) => {
-          setResults({
-            pictures: data.pictures,
-            total: data.total
+      if (query) {
+        fetch(url, options)
+          .then((resource) => resource.json())
+          .then((data) => {
+            const pictureSet = (page > 1) ? results.pictures.concat(data.pictures) : data.pictures;
+            setResults({
+              pictures: pictureSet,
+              total: data.total,
+            });
+            handleUpdate('loaded');
+          })
+          .catch((error) => {
+            handleUpdate('error');
           });
-          setLocalStatus('error')
-        })
-        .catch((error) => {
-          setLocalStatus('loaded')
-        });
+      } else {
+        handleUpdate('new');
+      }
     }
-    fetchData(query)
-  }, [query]);
+    fetchData(query, page);
+  }, [query, page]);
 
   // render
   const showCount = results.total > 0 ? results.total : 'no';
 
-  //if (status === 'error') return <Error />;
-  //if (status === 'loading') return <Loader />;
-  return <ResultsList 
-    showCount = {showCount}
-    query = {query}
-    results =  {results.pictures}
-    total = {results.total} />;
+  if (status === 'error') return <Error />;
+  if (status === 'loading') return <Loader />;
+  return (
+    <ResultsList
+      showCount={showCount}
+      query={query}
+      results={results.pictures}
+      total={results.total}
+      page={() => setPage(page + 1)}
+    />
+  );
 }
 
 
@@ -71,7 +78,7 @@ function Error() {
 }
 
 function ResultsList(props) {
-  const { showCount, query, results, total } = props;
+  const { showCount, query, results, total, page } = props;
 
   return (
     <div className={styles.results}>
@@ -83,16 +90,11 @@ function ResultsList(props) {
           {results.map((el) => <ListItem item={el} key={el.id} />)}
         </ul>
       )}
-      {/* {(results.length < total) && <ShowMore more={more} />} */}
+      {(results.length < total)
+        && <button className={styles.more} onClick={page} type="button">Show more</button>}
     </div>
   );
 }
-
-
-
-
-
-
 
 // OLD ONE
 // function ListItem(props) {
