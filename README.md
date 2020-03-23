@@ -8,6 +8,10 @@ Live preview: http://picdemia.borzyszkowski.org
 
 To run the project API keys are needed - stored in the .env file (API_KEY_GIPHY, API_KEY_PIXABAY). Those or not included in repo ;)
 
+Actually two solutions are provided (two different branches):
+* oldschool class-based (branch "classes-version")
+* modern hook-based (currently as "hooks-version" and master)
+
 ## The plan
 * Developement with webpack dev server, express, react build
 

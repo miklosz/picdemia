@@ -6,6 +6,7 @@ export default function Results(props) {
   const { query, status, handleUpdate } = props;
   const [results, setResults] = useState({ pictures: [], total: 0 });
   const [page, setPage] = useState(1);
+  const [responseQuery, setResponseQuery] = useState('');
 
   // fetching data moved here from parent component
   useEffect(() => {
@@ -17,12 +18,18 @@ export default function Results(props) {
         fetch(url, options)
           .then((resource) => resource.json())
           .then((data) => {
+            if (responseQuery !== query) {
+              // clear images from previous query
+              setPage(1);
+              setResults({ pictures: [] });
+            }
             const pictureSet = (page > 1) ? results.pictures.concat(data.pictures) : data.pictures;
             setResults({
               pictures: pictureSet,
               total: data.total,
             });
             handleUpdate('loaded');
+            setResponseQuery(data.query);
           })
           .catch((error) => {
             handleUpdate('error');
