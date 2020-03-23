@@ -10,22 +10,25 @@ function App() {
   const [query, setQuery] = useState('');
   const [resultsQuery, setResultsQuery] = useState('');
 
-  function handleSubmit(event) {
+  function updateResults(event, oldQuery, newQuery) {
     event.preventDefault();
-    if (query) {
-      setResultsQuery(query);
+    if (newQuery !== oldQuery) {
+      setResultsQuery(newQuery);
       setStatus('loading');
       setQuery('');
     }
+  }
+
+  function handleSubmit(event) {
+    updateResults(event, resultsQuery, query);
   }
 
   function handleUpdate(status) {
     setStatus(status);
   }
 
-  function handleHint(key, ev) {
-    setResultsQuery(key);
-    setStatus('loading');
+  function handleHint(key, event) {
+    updateResults(event, resultsQuery, key);
   }
 
   return (

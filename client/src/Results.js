@@ -9,7 +9,7 @@ export default function Results(props) {
 
   // fetching data moved here from parent component
   useEffect(() => {
-    function fetchData(query, page) {
+    function fetchData() {
       const url = `/api/search/${query}/${page}`;
       const options = { method: 'GET' };
 
