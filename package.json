@@ -44,7 +44,7 @@
   "dependencies": {
     "bent": "^7.1.1",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "script-loader": "^0.7.2",
